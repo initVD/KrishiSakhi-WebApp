@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishi Sakhi</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🌿 Welcome, {{ farmer_name }}!</h1>
+        {% if session.location and session.crop %}
+        <p>Your Location: <b>{{ session.location }}</b> | Your Crop: <b>{{ session.crop }}</b></p>
+        {% endif %}
+        <hr>
+
+        <h2>Diagnose Plant Disease</h2>
+        <img id="imagePreview" src="#" alt="Your image preview" class="image-preview"/>
+        <form action="/predict" method="post" enctype="multipart/form-data">
+            <input type="file" name="image" id="imageUpload" required>
+            <br><br>
+            <button type="submit">Diagnose</button>
+        </form>
+        <div id="result">
+            {% if prediction_text %}
+                <p>{{ prediction_text }}</p>
+            {% endif %}
+        </div>
+        <hr>
+
+        <h2>Ask a Question</h2>
+<form action="/ask" method="post">
+    <textarea name="question" id="questionText" rows="4" style="width: 95%;" placeholder="e.g., Which fertilizer is best for bananas during the monsoon?"></textarea>
+    <br><br>
+    <div style="display: flex; gap: 10px;">
+        <button type="submit" style="flex-grow: 1;">Ask Expert</button>
+        <button type="button" id="micButton" style="width: 60px;">🎤</button>
+    </div>
+</form>
+<div id="llm_answer">
+    {% if llm_answer %}
+        <h3>Expert Answer:</h3>
+        <p style="text-align: left; white-space: pre-wrap;">{{ llm_answer }}</p>
+    {% endif %}
+</div>
+
+        <br>
+        <a href="/logout">Logout</a>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
